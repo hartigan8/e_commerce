@@ -19,5 +19,7 @@ from django.urls import path
 from . import controller
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("home/", controller.home)
+    path("home/", controller.home, name="home"),
+    path("", controller.login, name="login"),
+    path('register/', controller.register, name='register'),
 ]

@@ -1,24 +1,20 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 # run this to update the database
-# manage.py migrate --run-syncdb
-class User(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=100)
-    password = models.CharField(max_length=100)
+# python manage.py migrate --run-syncdb
+class Customer(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     birth_date = models.DateField()
 
-    def __str__(self):
-        return self.name
+
 
 class Product(models.Model):
     division_name = models.CharField(max_length=100)
     department_name = models.CharField(max_length=100)
     class_name = models.CharField(max_length=100)
 
-    def __str__(self):
-        return f"{self.division_name} - {self.department_name} - {self.class_name}"
+
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -27,6 +23,5 @@ class Comment(models.Model):
     rating = models.IntegerField()
     recommended = models.BooleanField()
 
-    def __str__(self):
-        return f"{self.user.name} - {self.product.division_name} - {self.rating}"
+
 
