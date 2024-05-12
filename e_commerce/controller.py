@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login
 from . import models
 
+
 from django.shortcuts import render, redirect
 from . import CustomUserCreationForm
 
@@ -38,4 +39,7 @@ def login(request):
     return render(request, 'login.html')
 
 def home(request):
-    return render(request, 'home.html')
+    products = models.Product.objects.all()
+
+    return render(request, 'home.html', {'products': products})
+

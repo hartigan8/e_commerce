@@ -1,1 +1,34 @@
-<p1>asd</p1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <style>
+        /* CSS for image styles */
+        .product-image {
+            width: 200px; 
+            height: auto; 
+            float: left; 
+            margin-right: 20px; 
+        }
+    </style>
+</head>
+<body>
+    {% load static %}
+    <h1>Welcome to our Product Page</h1>
+
+    <div>
+        {% for product in products %}
+            <div>
+                <h2>{{ product.name }}</h2>
+                <img class="product-image" src="{% static 'product_images/' %}{{ product.image_path }}.jpeg" alt="{{ product.name }}">
+                <p>Description: {{ product.description }}</p>
+                <p>Class Name: {{ product.class_name }}</p>
+                <!-- Add more product details as needed -->
+                <p></p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

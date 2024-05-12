@@ -17,9 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from . import controller
+
+from django.conf import settings
+from django.conf.urls.static import static
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("home/", controller.home, name="home"),
     path("", controller.login, name="login"),
     path('register/', controller.register, name='register'),
-]
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
