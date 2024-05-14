@@ -27,4 +27,5 @@ urlpatterns = [
     path("home/", controller.home, name="home"),
     path("", controller.login, name="login"),
     path('register/', controller.register, name='register'),
+    path('add_comment/<int:product_id>/', controller.add_comment, name='add_comment'),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

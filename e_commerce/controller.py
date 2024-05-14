@@ -43,3 +43,23 @@ def home(request):
 
     return render(request, 'home.html', {'products': products})
 
+
+from django.shortcuts import render, redirect, get_object_or_404
+from . import models
+from .comment_form import CommentForm  # Import your CommentForm
+
+def add_comment(request, product_id):
+    product = get_object_or_404(models.Product, pk=product_id)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.product = product
+            comment.save()
+            return redirect('home')
+    else:
+        form = CommentForm()
+
+    return render(request, 'home.html', {'product': product, 'form': form})

@@ -17,3 +17,4 @@ class Comment(models.Model):
     comment = models.TextField()
     rating = models.IntegerField()
     recommended = models.BooleanField()
+    

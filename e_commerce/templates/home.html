@@ -5,12 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <style>
-        /* CSS for image styles */
+        .product-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 20px;
+            margin: -10px; /* Negative margin to counteract the padding */
+        }
+
+        .product-card {
+            width: calc(33.33% - 20px);
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+            margin: 5px; /* Adjusted margin to create space between products */
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
         .product-image {
-            width: 200px; 
-            height: auto; 
-            float: left; 
-            margin-right: 20px; 
+            width: 50%;
+            height: auto;
+            border-radius: 8px 8px 0 0;
+        }
+        .product-info {
+            padding: 20px;
+        }
+        h2 {
+            margin-top: 0;
+        }
+        p {
+            margin: 0 0 10px;
+        }
+        .comment-form {
+            margin-top: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -18,15 +74,26 @@
     {% load static %}
     <h1>Welcome to our Product Page</h1>
 
-    <div>
+    <div class="product-container">
         {% for product in products %}
-            <div>
-                <h2>{{ product.name }}</h2>
+            <div class="product-card">
                 <img class="product-image" src="{% static 'product_images/' %}{{ product.image_path }}.jpeg" alt="{{ product.name }}">
-                <p>Description: {{ product.description }}</p>
-                <p>Class Name: {{ product.class_name }}</p>
-                <!-- Add more product details as needed -->
-                <p></p>
+                <div class="product-info">
+                    <h2>{{ product.name }}</h2>
+                    <p>Description: {{ product.description }}</p>
+                    <p>Class Name: {{ product.class_name }}</p>
+                    <!-- Add more product details as needed -->
+                    
+                    <!-- Comment Form -->
+                    <form class="comment-form" method="post" action="{% url 'add_comment' product.id %}">
+                        {% csrf_token %}
+                        <label for="comment">Your Comment:</label>
+                        <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
+                        <label for="rating">Rating (0-5):</label>
+                        <input type="number" id="rating" name="rating" min="0" max="5">
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
             </div>
         {% endfor %}
     </div>
