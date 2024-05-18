@@ -7,7 +7,11 @@ from . import models
 
 from django.shortcuts import render, redirect
 from . import CustomUserCreationForm
-
+import joblib
+import numpy as np
+from nltk.sentiment import SentimentIntensityAnalyzer
+model = joblib.load('final_xgb_model.pkl')
+sia = SentimentIntensityAnalyzer()
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm.CustomUserCreationForm(request.POST)
@@ -40,8 +44,9 @@ def login(request):
 
 def home(request):
     products = models.Product.objects.all()
+    product_forms = {product.id: CommentForm() for product in products}
+    return render(request, 'home.html', {'products': products, 'product_forms': product_forms})
 
-    return render(request, 'home.html', {'products': products})
 
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -50,16 +55,25 @@ from .comment_form import CommentForm  # Import your CommentForm
 
 def add_comment(request, product_id):
     product = get_object_or_404(models.Product, pk=product_id)
-
+    
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.user = request.user
             comment.product = product
+            comment.recommended = is_recommended(comment)
             comment.save()
             return redirect('home')
     else:
         form = CommentForm()
 
-    return render(request, 'home.html', {'product': product, 'form': form})
+    return redirect('home')  # Redirect back to the home page
+
+def is_recommended(comment):
+    comment_text=comment.comment
+    scores = sia.polarity_scores(comment_text)
+    threshold = 0.5
+    is_positive = scores['compound'] >= 0.1
+    
+    return is_positive

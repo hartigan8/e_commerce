@@ -68,6 +68,16 @@
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
+        .comments-section {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+        .comment {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+        }
     </style>
 </head>
 <body>
@@ -93,6 +103,20 @@
                         <input type="number" id="rating" name="rating" min="0" max="5">
                         <input type="submit" value="Submit">
                     </form>
+                    
+                    <div class="comments-section">
+                        <h3>Comments</h3>
+                        {% for comment in product.comment_set.all %}
+                            <div class="comment">
+                                <p>User: {{ comment.user.username }}:</p>
+                                <p>Comment: {{ comment.comment }}</p>
+                                <p>Rating: {{ comment.rating }}</p>
+                                <p>Recommended: {% if comment.recommended %}Yes{% else %}No{% endif %}</p>
+                            </div>
+                        {% empty %}
+                            <p>No comments yet.</p>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         {% endfor %}
